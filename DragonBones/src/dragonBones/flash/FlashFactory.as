@@ -255,7 +255,7 @@
 				}
 				
 				const shape:Shape = new Shape();
-				shape.graphics.beginBitmapFill((textureData.parent as FlashTextureAtlasData).texture, helpMatrix, false, true);
+				shape.graphics.beginBitmapFill((textureData.parent as FlashTextureAtlasData).texture, helpMatrix, false);
 				shape.graphics.drawRect(0, 0, width, height);
 				
 				return shape;

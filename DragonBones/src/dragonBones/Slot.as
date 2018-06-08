@@ -1107,6 +1107,13 @@
 			_transformDirty = true;
 		}
 		/**
+		 * 替换与原大小一致的显示对象
+		 * @param	value
+		 */
+		public function replaceDisplay(value:Object):void {
+			
+		}
+		/**
 		 * @private
 		 */
 		public function get skinSlotData(): SkinSlotData 

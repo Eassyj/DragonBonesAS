@@ -267,7 +267,7 @@ package dragonBones.flash
 						
 						if (currentTextureAtlas)
 						{
-							meshDisplay.graphics.beginBitmapFill(currentTextureAtlas, null, false, true);
+							meshDisplay.graphics.beginBitmapFill(currentTextureAtlas, null, false);
 							meshDisplay.graphics.drawTriangles(_path.vertices, _path.indices, _path.uvtData);
 						}
 						
@@ -315,7 +315,7 @@ package dragonBones.flash
 						
 						if (currentTextureAtlas)
 						{
-							normalDisplay.graphics.beginBitmapFill(currentTextureAtlas, _helpMatrix, false, true);
+							normalDisplay.graphics.beginBitmapFill(currentTextureAtlas, _helpMatrix, false);
 							normalDisplay.graphics.drawRect(-_pivotX, -_pivotY, width, height);
 						}
 					}
@@ -402,7 +402,7 @@ package dragonBones.flash
 					_path.vertices[i + 1] = yG - _pivotY;
 				}
 				
-				meshDisplay.graphics.beginBitmapFill(_meshTexture, null, false, true);
+				meshDisplay.graphics.beginBitmapFill(_meshTexture, null, false);
 				meshDisplay.graphics.drawTriangles(_path.vertices, _path.indices, _path.uvtData);
 			}
 			else if (hasFFD)
@@ -418,7 +418,7 @@ package dragonBones.flash
 					_path.vertices[i + 1] = yG - _pivotY;
 				}
 				
-				meshDisplay.graphics.beginBitmapFill(_meshTexture, null, true, true);
+				meshDisplay.graphics.beginBitmapFill(_meshTexture, null, true);
 				meshDisplay.graphics.drawTriangles(_path.vertices, _path.indices, _path.uvtData);
 			}
 		}
@@ -434,6 +434,43 @@ package dragonBones.flash
 			else
 			{
 				_renderDisplay.transform.matrix = globalTransformMatrix;
+			}
+		}
+		
+		override public function replaceDisplay(value:Object):void {
+			if (value is BitmapData) {
+				const shape:Shape = display as Shape;
+				if (shape) {
+					var currentTextureData:FlashTextureData = _textureData as FlashTextureData;
+					
+					var width:Number = 0;
+					var height:Number = 0;
+					if (currentTextureData.rotated)
+					{
+						width = currentTextureData.region.height;
+						height = currentTextureData.region.width;
+					}
+					else
+					{
+						height = currentTextureData.region.height;
+						width = currentTextureData.region.width;
+					}
+					
+					const scale:Number = 1 / currentTextureData.parent.scale;
+				
+					_helpMatrix.a = scale;
+					_helpMatrix.b = 0;
+					_helpMatrix.c = 0;
+					_helpMatrix.d = scale;
+					_helpMatrix.tx = -_pivotX;
+					_helpMatrix.ty = -_pivotY;
+					
+					shape.graphics.clear();
+					shape.graphics.beginBitmapFill((value as BitmapData), _helpMatrix, false);
+					shape.graphics.drawRect(-_pivotX, -_pivotY, value.width, value.height);
+				}
+			} else {
+				this.display = value;
 			}
 		}
 	}
